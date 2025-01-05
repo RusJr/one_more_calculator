@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -10,11 +9,12 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/resultTv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="15dp"
-        android:textSize="80sp"
+        android:textSize="50sp"
         android:textColor="@color/black"
         android:gravity="bottom|end"
         android:text="0">
@@ -34,22 +34,27 @@
                 android:id="@+id/button_ac"
                 android:text="AC"
                 style="@style/btn"
+                android:onClick="onAC"
                 />
 
             <Button
                 android:id="@+id/button_pi"
                 style="@style/btn"
-                android:text="π" />
+                android:text="π"
+                android:onClick="onInputPi"
+                />
             <Button
-                android:id="@+id/button_remove"
+                android:id="@+id/button_backspace"
                 android:text="⌫"
                 style="@style/btn"
+                android:onClick="onBackspace"
                 />
             <Button
                 android:id="@+id/button_dev"
                 android:text="/"
                 style="@style/btn"
                 android:background="@drawable/ic_rounded_button_yellow"
+                android:onClick="onDivide"
                 />
         </LinearLayout>
         <LinearLayout
@@ -59,22 +64,26 @@
                 android:id="@+id/button_7"
                 android:text="7"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_8"
                 android:text="8"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_9"
                 android:text="9"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_mul"
                 android:text="*"
                 style="@style/btn"
                 android:background="@drawable/ic_rounded_button_yellow"
+                android:onClick="onMultiply"
                 />
         </LinearLayout>
         <LinearLayout
@@ -84,22 +93,26 @@
                 android:id="@+id/button_4"
                 android:text="4"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_5"
                 android:text="5"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_6"
                 android:text="6"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_sub"
                 android:text="-"
                 style="@style/btn"
                 android:background="@drawable/ic_rounded_button_yellow"
+                android:onClick="onSubtract"
                 />
         </LinearLayout>
         <LinearLayout
@@ -109,22 +122,26 @@
                 android:id="@+id/button_1"
                 android:text="1"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_2"
                 android:text="2"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_3"
                 android:text="3"
                 style="@style/btn"
+                android:onClick="onInput"
                 />
             <Button
                 android:id="@+id/button_add"
                 android:text="+"
                 style="@style/btn"
                 android:background="@drawable/ic_rounded_button_yellow"
+                android:onClick="onAdd"
                 />
         </LinearLayout>
         <LinearLayout
@@ -139,11 +156,13 @@
                     android:id="@+id/button_0"
                     android:text="0"
                     style="@style/btn"
+                    android:onClick="onInput"
                     />
                 <Button
                     android:id="@+id/button_point"
                     android:text="."
                     style="@style/btn"
+                    android:onClick="onInput"
                     />
             </LinearLayout>
             <LinearLayout
@@ -158,6 +177,7 @@
                     android:background="@drawable/ic_rounded_button_orange"
                     android:layout_weight="1"
                     android:textColor="@color/white"
+                    android:onClick="onEquals"
                 />
             </LinearLayout>
         </LinearLayout>
