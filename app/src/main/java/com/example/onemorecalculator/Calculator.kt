@@ -1,5 +1,7 @@
 package com.example.onemorecalculator
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
@@ -38,7 +40,10 @@ class Calculator(val limit: Int) {
 
         } else if (state == State.NUMBER_INPUT) {
             if (screenNumber.length < limit) {
-                if (!(input == "." && screenNumber.contains("."))) {
+                if (
+                    !(input == "." && screenNumber.contains("."))
+                    && !(screenNumber == "0" && input == "0")
+                ) {
                     screenNumber = "$screenNumber$input"
                 }
             }
@@ -68,7 +73,10 @@ class Calculator(val limit: Int) {
 
     fun backspace() {
         if (state == State.NUMBER_INPUT) {
-            if (screenNumber.length == 1) {
+            if (
+                (screenNumber.length == 1) ||
+                (screenNumber.length == 2 && screenNumber.startsWith("-"))
+            ) {
                 screenNumber = "0"
                 if (operation === null) {
                     state = State.INITIAL
@@ -97,19 +105,23 @@ class Calculator(val limit: Int) {
 
     fun equals() {
         if (operation !== null  && state == State.NUMBER_INPUT){
-            if (operation == Operation.ADDITION) {
-                screenNumber = (firstNumber?.toDouble()?.plus(screenNumber.toDouble())).toString()
-            } else if (operation == Operation.SUBTRACTION) {
-                screenNumber = (firstNumber?.toDouble()?.minus(screenNumber.toDouble())).toString()
-            } else if (operation == Operation.MULTIPLICATION) {
-                screenNumber = (firstNumber?.toDouble()?.times(screenNumber.toDouble())).toString()
-            } else if (operation == Operation.DIVISION) {
-                screenNumber = (firstNumber?.toDouble()?.div(screenNumber.toDouble())).toString()
+            val result: BigDecimal? = when (operation) {
+                Operation.ADDITION -> firstNumber?.toBigDecimal()?.plus(
+                    screenNumber.toBigDecimal()
+                )
+                Operation.SUBTRACTION -> firstNumber?.toBigDecimal()?.minus(
+                    screenNumber.toBigDecimal()
+                )
+                Operation.MULTIPLICATION -> firstNumber?.toBigDecimal()?.times(
+                    screenNumber.toBigDecimal()
+                )
+                Operation.DIVISION -> firstNumber?.toBigDecimal()?.divide(
+                    screenNumber.toBigDecimal(), limit - 2, RoundingMode.HALF_UP
+                )
+                else -> throw Exception("Invalid operation")
             }
 
-            if (screenNumber.endsWith(".0")) {
-                screenNumber = screenNumber.substring(0, screenNumber.length - 2)
-            }
+            screenNumber = result?.stripTrailingZeros().toString()
             firstNumber = null
             operation = null
         }
@@ -122,8 +134,17 @@ fun formatNumber(input: String, limit: Int): String {
         throw Exception("Invalid input")
     }
 
+    // to keep zeros on input like "1.00"
+    if (input.contains(".") && input.endsWith("0")) {
+        return input
+    }
+
     val format = DecimalFormat("#." + "#".repeat(limit - 1))
-    val formatted = format.format(number)
+    var formatted = format.format(number)
+
+    if (input.endsWith(".")) {
+        formatted = "$formatted."
+    }
 
 
     if (formatted.length > limit) {
