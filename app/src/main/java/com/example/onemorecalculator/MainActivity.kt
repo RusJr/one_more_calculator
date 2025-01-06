@@ -5,6 +5,7 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 
 
@@ -76,7 +77,12 @@ class MainActivity : ComponentActivity() {
 
     fun onEquals(view: View) {
         view.performHapticFeedback(1)
-        calc.equals()
+        try {
+            calc.equals()
+        } catch (e: CustomZeroDivisionException) {
+            Toast.makeText(this, "ZERO DIVISION!", Toast.LENGTH_SHORT).show()
+        }
+
         textView.text = calc.getScreenNumber()
     }
 

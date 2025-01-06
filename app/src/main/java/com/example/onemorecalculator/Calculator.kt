@@ -20,6 +20,8 @@ enum class State {
     WAITING_FOR_SECOND_NUMBER,
 }
 
+class CustomZeroDivisionException(message: String) : Exception(message)
+
 class Calculator(val limit: Int) {
 
     private var state: State = State.INITIAL
@@ -96,27 +98,32 @@ class Calculator(val limit: Int) {
     }
 
     fun setOperation(operationToSet: Operation) {
-        if (operation === null) {
-            operation = operationToSet
-            state = State.WAITING_FOR_SECOND_NUMBER
-            firstNumber = screenNumber
-        }
+        operation = operationToSet
+        state = State.WAITING_FOR_SECOND_NUMBER
+        firstNumber = screenNumber
+
     }
 
     fun equals() {
+        val screenNumberDecimal = screenNumber.toBigDecimal()
+        if (operation == Operation.DIVISION && screenNumberDecimal == BigDecimal(0)) {
+            reset()
+            throw CustomZeroDivisionException("zero division")
+        }
+
         if (operation !== null  && state == State.NUMBER_INPUT){
             val result: BigDecimal? = when (operation) {
                 Operation.ADDITION -> firstNumber?.toBigDecimal()?.plus(
-                    screenNumber.toBigDecimal()
+                    screenNumberDecimal
                 )
                 Operation.SUBTRACTION -> firstNumber?.toBigDecimal()?.minus(
-                    screenNumber.toBigDecimal()
+                    screenNumberDecimal
                 )
                 Operation.MULTIPLICATION -> firstNumber?.toBigDecimal()?.times(
-                    screenNumber.toBigDecimal()
+                    screenNumberDecimal
                 )
                 Operation.DIVISION -> firstNumber?.toBigDecimal()?.divide(
-                    screenNumber.toBigDecimal(), limit - 2, RoundingMode.HALF_UP
+                    screenNumberDecimal, limit - 2, RoundingMode.HALF_UP
                 )
                 else -> throw Exception("Invalid operation")
             }
@@ -145,7 +152,6 @@ fun formatNumber(input: String, limit: Int): String {
     if (input.endsWith(".")) {
         formatted = "$formatted."
     }
-
 
     if (formatted.length > limit) {
         return String.format("%.${limit - 3}e", number)
