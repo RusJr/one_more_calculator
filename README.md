@@ -7,3 +7,6 @@ A simple calculator developed for educational purposes, using Android and Kotlin
 - Support for basic arithmetic operations: addition, subtraction, multiplication, and division.
 - Intuitive interface with buttons for entering numbers and operators.
 - Functionality implemented using Kotlin.
+- Adaptive layout. It supports landscape orientation as well.
+
+<img src="screenshot.jpg" alt="screenshot" height="500"/>
